@@ -5,8 +5,6 @@ import com.eventbooking.events.dto.BookingRequest;
 import com.eventbooking.events.model.Booking;
 import com.eventbooking.events.service.BookingService;
 import org.springframework.web.bind.annotation.*;
-
-import java.nio.file.Path;
 import java.util.List;
 
 @RestController

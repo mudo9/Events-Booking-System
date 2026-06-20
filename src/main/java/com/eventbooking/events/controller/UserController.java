@@ -1,7 +1,9 @@
 package com.eventbooking.events.controller;
 
+import com.eventbooking.events.dto.UserResponse;
 import com.eventbooking.events.model.User;
 import com.eventbooking.events.repository.UserRepository;
+import com.eventbooking.events.service.UserService;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -10,18 +12,23 @@ import java.util.List;
 @RequestMapping("/users")
 public class UserController {
 
-    private final UserRepository userRepository;
-    public UserController(UserRepository userRepository) {
-        this.userRepository = userRepository;
+    private final UserService userService;
+    public UserController(UserService userService) {
+        this.userService = userService;
     }
 
     @GetMapping
-    public List<User> getAllUsers() {
-        return userRepository.findAll();
+    public List<UserResponse> getAllUsers() {
+        return userService.getAllUsers();
     }
 
     @PostMapping
     public User createUser(@RequestBody User user) {
-        return userRepository.save(user);
+        return userService.createUser(user);
+    }
+
+    @GetMapping("/{id}")
+    public UserResponse getUserById(@PathVariable Long id) {
+        return userService.getUserById(id);
     }
 }
