@@ -2,7 +2,6 @@ package com.eventbooking.events.controller;
 
 import com.eventbooking.events.dto.UserResponse;
 import com.eventbooking.events.model.User;
-import com.eventbooking.events.repository.UserRepository;
 import com.eventbooking.events.service.UserService;
 import org.springframework.web.bind.annotation.*;
 
@@ -23,7 +22,7 @@ public class UserController {
     }
 
     @PostMapping
-    public User createUser(@RequestBody User user) {
+    public UserResponse createUser(@RequestBody User user) {
         return userService.createUser(user);
     }
 

@@ -26,22 +26,23 @@ public class UserService {
         for (User user : users) {
             String firstName = user.getFirstName();
             String lastName = user.getLastName();
-            String email = user.getEmail();
-            UserResponse userResponse = new UserResponse(firstName, lastName, email);
+            String username = user.getUsername();
+            UserResponse userResponse = new UserResponse(firstName, lastName, username);
             properUserValues.add(userResponse);
         }
         return properUserValues;
     }
 
-    public User createUser(User user) {
+    public UserResponse createUser(User user) {
         String hashedPassword = passwordEncoder.encode(user.getPassword());
         user.setPassword(hashedPassword);
-        return userRepository.save(user);
+        userRepository.save(user);
+        return new UserResponse(user.getFirstName(), user.getLastName(), user.getUsername());
     }
 
     public UserResponse getUserById(Long id) {
         User user = userRepository.findById(id).
                 orElseThrow(() -> new RuntimeException("User with id: " + id + " doesn't exist."));
-        return new UserResponse(user.getFirstName(), user.getLastName(), user.getEmail());
+        return new UserResponse(user.getFirstName(), user.getLastName(), user.getUsername());
     }
 }
