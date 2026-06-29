@@ -4,6 +4,8 @@ package com.eventbooking.events.controller;
 import com.eventbooking.events.dto.BookingRequest;
 import com.eventbooking.events.model.Booking;
 import com.eventbooking.events.service.BookingService;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
@@ -26,8 +28,8 @@ public class BookingController {
     }
 
     @DeleteMapping("/{id}")
-    public void deleteBooking(@PathVariable Long id) {
-        bookingService.deleteBooking(id);
+    public void deleteBooking(@PathVariable Long id, @AuthenticationPrincipal UserDetails userDetails) {
+        bookingService.deleteBooking(id, userDetails.getUsername());
     }
 
     @GetMapping

@@ -48,10 +48,13 @@ public class BookingService {
         return bookingRepository.save(booking);
     }
 
-    public void deleteBooking(Long id) {
+    public void deleteBooking(Long id, String username) {
         Booking booking = bookingRepository.findById(id).
                 orElseThrow(() -> new RuntimeException("Booking not found with id: " + id));
 
+        if (!booking.getUser().getUsername().equals(username)) {
+            throw new RuntimeException("You can only cancel your own booking");
+        }
         Event event = booking.getEvent();
         event.setCapacity(event.getCapacity() + booking.getNumberOfTickets());
         eventRepository.save(event);
