@@ -56,4 +56,14 @@ class BookingServiceTest {
 
         assertThrows(RuntimeException.class, ()-> bookingService.createBooking(1L, 1L, 20));
     }
+
+    @Test
+    void shouldThrowExceptionIfEventIsNotFound() {
+        User user = new User();
+        user.setId(1L);
+
+        when(userRepository.findById(1L)).thenReturn(Optional.of(user));
+        when (eventRepository.findById(1L)).thenReturn(Optional.empty());
+        assertThrows(RuntimeException.class, () -> bookingService.createBooking(1L, 1L, 20));
+    }
 }
