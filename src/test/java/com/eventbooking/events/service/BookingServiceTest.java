@@ -66,4 +66,19 @@ class BookingServiceTest {
         when (eventRepository.findById(1L)).thenReturn(Optional.empty());
         assertThrows(RuntimeException.class, () -> bookingService.createBooking(1L, 1L, 20));
     }
+
+    @Test
+    void shouldThrowExceptionIfNumberOfTicketsExceedsEventCapacity() {
+        User user = new User();
+        user.setId(1L);
+
+        Event event = new Event();
+        event.setId(1L);
+        event.setCapacity(5);
+
+        when(userRepository.findById(1L)).thenReturn(Optional.of(user));
+        when(eventRepository.findById(1L)).thenReturn(Optional.of(event));
+        
+        assertThrows(RuntimeException.class, () -> bookingService.createBooking(1L, 1L, 6));
+    }
 }
