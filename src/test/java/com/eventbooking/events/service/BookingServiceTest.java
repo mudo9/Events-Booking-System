@@ -113,4 +113,21 @@ class BookingServiceTest {
 
         verify(bookingRepository).save(any(Booking.class));
     }
+    @Test
+    void shouldDeleteAnExistingBooking() {
+        Booking booking = new Booking();
+        booking.setId(1L);
+        booking.setNumberOfTickets(4);
+
+        User user = new User();
+        user.setUsername("mudo");
+
+        Event event = new Event();
+        event.setCapacity(50);
+        booking.setUser(user);
+        booking.setEvent(event);
+        when(bookingRepository.findById(1L)).thenReturn(Optional.of(booking));
+        bookingService.deleteBooking(1L, "mudo");
+        verify(bookingRepository).deleteById(1L);
+    }
 }
