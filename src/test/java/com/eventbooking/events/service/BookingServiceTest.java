@@ -17,6 +17,8 @@ import java.util.Optional;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
@@ -80,5 +82,35 @@ class BookingServiceTest {
         when(eventRepository.findById(1L)).thenReturn(Optional.of(event));
         
         assertThrows(RuntimeException.class, () -> bookingService.createBooking(1L, 1L, 6));
+    }
+
+    @Test
+    void shouldThrowExceptionIfNumberOfTicketsIsLessThanOrEqualToZero() {
+        User user = new User();
+        user.setId(1L);
+
+        Event event = new Event();
+        event.setId(1L);
+
+        when(userRepository.findById(1L)).thenReturn(Optional.of(user));
+        when(eventRepository.findById(1L)).thenReturn(Optional.of(event));
+
+        assertThrows(RuntimeException.class, () -> bookingService.createBooking(1L, 1L, 0));
+    }
+
+    @Test
+    void shouldSaveTheBookingIfValidParametersAreGiven() {
+        User user = new User();
+        user.setId(1L);
+
+        Event event = new Event();
+        event.setId(1L);
+        event.setCapacity(30);
+
+        when(userRepository.findById(1L)).thenReturn(Optional.of(user));
+        when(eventRepository.findById(1L)).thenReturn(Optional.of(event));
+        bookingService.createBooking(1L, 1L, 5);
+
+        verify(bookingRepository).save(any(Booking.class));
     }
 }
