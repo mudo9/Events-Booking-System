@@ -130,4 +130,23 @@ class BookingServiceTest {
         bookingService.deleteBooking(1L, "mudo");
         verify(bookingRepository).deleteById(1L);
     }
+
+    @Test
+    void shouldThrowErrorIfBookingToBeDeletedDoesNotExist() {
+        when(bookingRepository.findById(2L)).thenReturn(Optional.empty());
+        assertThrows(RuntimeException.class, () -> bookingService.deleteBooking(2L, "mudo"));
+    }
+
+    @Test
+    void shouldThrowErrorIfUserProposingADeleteDoesNotOwnTheBooking() {
+        Booking booking = new Booking();
+        booking.setId(1L);
+
+        User user = new User();
+        user.setUsername("mudo");
+        booking.setUser(user);
+
+        when(bookingRepository.findById(1L)).thenReturn(Optional.of(booking));
+        assertThrows(RuntimeException.class, () -> bookingService.deleteBooking(1L, "James"));
+    }
 }
